@@ -6,7 +6,7 @@
  */
 
 /* 
-    Biblioteca Arduino 
+    Biblioteca Arduino Core
 */
 #include <Arduino.h>
 
@@ -17,15 +17,10 @@
 #include "freertos/task.h"
 
 /* 
-    Mapeamento de pinos 
+    Macros
 */
 #define LED1 2
 #define LED2 14
-
-/* 
-    Macros 
-*/
-#define BLINKER 200
 
 /* 
     Typedef structs
@@ -43,7 +38,7 @@ typedef struct
 } StructCounter_t;
 
 /* 
-    Protótipos das Tasks
+    Definições Auxiliares
 */
 TaskHandle_t xTask1Hanlde = NULL;
 TaskHandle_t xTask2Handle = NULL;
@@ -97,16 +92,24 @@ void setup()
 {  
     Serial.begin( 9600 );
 
-    /* Iniciando struct de Task1: */
+    /* 
+    Iniciando struct de Task1: 
+    */
     StructLed_t xLed1 = { .usGpio = 2, .usDelay_MS = 1000 };
 
-    /* Iniciando struct de Task2: */
+    /* 
+        Iniciando struct de Task2: 
+    */
     StructLed_t xLed2 = { .usGpio = 14, .usDelay_MS = 200 };
 
-    /* Iniciando struct de Task3: */
+    /* 
+        Iniciando struct de Task3: 
+    */
     StructCounter_t xCounter1 = { .message = "Estou executando a Task 03: ", .usCounter = 0, .usCounterMax = 10 };
 
-    /* Iniciando struct de Task3: */
+    /* 
+        Iniciando struct de Task3: 
+    */
     StructCounter_t xCounter2 = { .message = "Estou executando a Task 04: ", .usCounter = 10, .usCounterMax = 20 };
 
     xTaskCreate( vTask1, "Task1", configMINIMAL_STACK_SIZE, &xLed1, 1, &xTask1Hanlde );

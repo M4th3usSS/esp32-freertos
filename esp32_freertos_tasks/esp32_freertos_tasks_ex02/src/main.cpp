@@ -23,7 +23,7 @@
 #define LED 2
 
 /* 
-    Definições Globais
+    Definições Auxiliares
 */
 TaskHandle_t xTask1Handle = NULL;
 TaskHandle_t xTask2Handle = NULL;

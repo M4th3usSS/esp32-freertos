@@ -23,7 +23,7 @@
 #define LED2 14
 
 /* 
-    Variáveis para armazenamento das Tasks 
+    Definições Auxiliares
 */
 TaskHandle_t xTask1Handle = NULL;
 TaskHandle_t xTask2Handle = NULL;

@@ -4,7 +4,7 @@
  */
 
 /* 
-    Biblioteca Arduino 
+    Biblioteca Arduino Core
 */
 #include <Arduino.h>
 
@@ -14,12 +14,14 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-/* Macros */
+/* 
+    Macros 
+*/
 #define LED1 2
 #define LED2 14
 
 /* 
-    Protótipos das Tasks
+    Definições Auxiliares
 */
 TaskHandle_t xTask1Handle = NULL;
 TaskHandle_t xTask2Handle = NULL;
@@ -32,7 +34,7 @@ void vTask1( void *pvParameters );
 void vTask2( void *pvParameters );
 
 /* 
-    Protótipos das Tasks 
+    Definição das Tasks 
 */
 void vTask1( void *pvParameters )
 {   
@@ -52,9 +54,6 @@ void vTask1( void *pvParameters )
     }
 }
 
-/* 
-    Definição das Tasks
-*/
 void vTask2(void *pvParameters)
 {
     UBaseType_t uxHighWaterMark;

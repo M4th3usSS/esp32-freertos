@@ -6,7 +6,7 @@
  */
 
 /* 
-    Biblioteca Arduino 
+    Biblioteca Arduino Core
 */
 #include <Arduino.h>
 
@@ -16,18 +16,22 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-/* Macros */
+/* 
+    Macros 
+*/
 #define LED1 2
 #define LED2 14
 
 /* 
-    Protótipos das Tasks
+    Definições Auxiliares
 */
 TaskHandle_t xTask1Handle = NULL;
 TaskHandle_t xTask2Handle = NULL;
 TaskHandle_t xTask3Handle = NULL;
 
-/* Protótipos das Tasks */
+/* 
+    Protótipos das Tasks 
+*/
 void vTask1( void *pvParameters );
 void vTask2( void *pvParameters );
 
