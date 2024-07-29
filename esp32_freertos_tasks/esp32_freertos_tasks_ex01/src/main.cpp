@@ -1,64 +1,73 @@
 /**
  * Exemplo 01 - Criação de Tasks no FreeRTOS
+ * Objetivo: 
+ *      Criar uma Task para Blink Led
+ *      Criar uma Task para Imprimir no monitor serial
  * Por: Matheus Sousa
- */
+*/
 
-/* Biblioteca Arduino */
+/* 
+    Biblioteca Arduino Core
+*/
 #include <Arduino.h>
 
-/* Bibliotecas FreeRTOS */
+/* 
+    Bibliotecas FreeRTOS 
+*/
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-/* Mapeamento de pinos */
+/* 
+    Macros 
+*/
 #define LED 2
 
-/* Variáveis para armazenamento das Tasks */
-TaskHandle_t task1Handle = NULL;
-TaskHandle_t task2Handle = NULL;
+/* 
+    Definições Globais
+*/
+TaskHandle_t xTask1Handle = NULL;
+TaskHandle_t xTask2Handle = NULL;
 
-/* Protótipos das Tasks */
+/* 
+    Protótipos das Tasks 
+*/
 void vTaks1( void *pvParameters );
 void vTask2( void *pvParameters );
 
-
-
-/* Task1 - Pisca LED */
+/* 
+    Definição das Tasks 
+*/
 void vTaks1( void *pvParameters )
 {
     pinMode( LED, OUTPUT );
 
     for( ;; )
     {
-        digitalWrite( LED, HIGH );
-        vTaskDelay( pdMS_TO_TICKS( 200 ) );
-        digitalWrite( LED, LOW );
+        digitalWrite( LED, !digitalRead(LED) );
         vTaskDelay( pdMS_TO_TICKS( 200 ) );
     }
 }
 
-/* Task2 - Impressão na Serial */ 
 void vTask2( void *pvParameters )
 {
-    Serial.begin( 9600 );
-
-    uint32_t cont = 0;
+    uint32_t ulCount = 0;
 
     for( ;; )
     {
-        Serial.println( "Task 2: " + String(cont++) );
-        vTaskDelay( pdMS_TO_TICKS(200) );
+        Serial.println( "Task 2: " + String(ulCount) );
+        ulCount++;
+        vTaskDelay( pdMS_TO_TICKS( 200 ) );
     }
 }
 
-
-
 void setup()
 {
-    xTaskCreate( vTaks1, "TASK1", configMINIMAL_STACK_SIZE, NULL, 1, &task1Handle );
-    xTaskCreate( vTask2, "TASK2", configMINIMAL_STACK_SIZE+1024, NULL, 2, &task2Handle );
+    Serial.begin( 9600 );
+
+    xTaskCreate( vTaks1, "TASK1", configMINIMAL_STACK_SIZE, NULL, 1, &xTask1Handle );
+    xTaskCreate( vTask2, "TASK2", configMINIMAL_STACK_SIZE+1024, NULL, 2, &xTask2Handle );
 }
 
 void loop() {
-    vTaskDelay( pdMS_TO_TICKS(10000) );
+    vTaskDelay( pdMS_TO_TICKS( 10000 ) );
 }

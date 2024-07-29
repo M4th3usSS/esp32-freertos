@@ -1,80 +1,86 @@
 /**
  * Exemplo 03 - Parar e Retomar uma Task no FreeRTOS
+ * Objetivo:
+ *      Usar uma Task para suspender e retomar a execução de outra Task
  * Por: Matheus Sousa
- */
+*/
 
-/* Biblioteca Arduino */
+/* 
+    Biblioteca Arduino Core
+*/
 #include <Arduino.h>
 
-/* Bibliotecas FreeRTOS */
+/* 
+    Bibliotecas FreeRTOS 
+*/
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-/* Mapeamento de pinos */
+/* 
+    Macros
+*/
 #define LED 2
-#define BLINKER 200
 
-/* Variáveis para armazenamento das Tasks */
-TaskHandle_t xTaks1Handle = NULL;
-TaskHandle_t xTask2Handle = NULL;
+/* 
+    Definições Globais
+*/
+TaskHandle_t xTasks1Handle = NULL;
+TaskHandle_t xTasks2Handle = NULL;
 
-/* Protótipos das Tasks */
+/* 
+    Protótipos das Tasks 
+*/
 void vTask1( void *pvParameters );
 void vTask2( void *pvParameters );
 
-
-
-// Task1 - Pisca LED
+/* 
+    Definição das Tasks 
+*/
 void vTask1( void *pvParameters )
 {
     pinMode(LED, OUTPUT);
 
     for( ;; )
     {
-        digitalWrite( LED, HIGH );
-        vTaskDelay( pdMS_TO_TICKS( BLINKER ) );
-        digitalWrite( LED, LOW );
-        vTaskDelay( pdMS_TO_TICKS( BLINKER ) );
+        digitalWrite( LED, !digitalRead(LED) );
+        vTaskDelay( pdMS_TO_TICKS( 1000 ) );
     }
 }
 
-// Task2 - Impressão na Serial
 void vTask2(void *pvParameters)
 {
-    Serial.begin( 9600 );
-
-    uint32_t cont = 0;
+    uint32_t ulCount = 0;
 
     for( ;; ) 
     {
-        Serial.println( "Task 2: " + String(cont++) );
+        Serial.println( "Task 2: " + String(ulCount++) );
         
         //  Suspendendo a Task1...
-        if ( cont == 50 ) {
+        if ( ulCount == 50 ) {
             Serial.println( "Suspendendo a Task1..." );
+            vTaskSuspend( xTasks1Handle );
             digitalWrite( LED, LOW );
-            vTaskSuspend( xTaks1Handle );
         }
 
         // Retomando a Task1...
-        else if ( cont == 100 ) {
+        else if ( ulCount == 100 ) {
             Serial.println( "Retomando a Task1..." );
-            vTaskResume( xTaks1Handle );
-            cont = 0;
+            vTaskResume( xTasks1Handle );
+            ulCount = 0;
         }
 
-        vTaskDelay( pdMS_TO_TICKS(BLINKER) );
+        vTaskDelay( pdMS_TO_TICKS( 200 ) );
     }
 }
 
-
-
 void setup()
 {
-    xTaskCreate( vTask1, "TASK1", configMINIMAL_STACK_SIZE, NULL, 1, &xTaks1Handle );
-    xTaskCreate( vTask2, "TASK2", configMINIMAL_STACK_SIZE+1024, NULL, 2, &xTask2Handle );
+    Serial.begin( 9600 );
+
+    xTaskCreate( vTask1, "TASK1", configMINIMAL_STACK_SIZE, NULL, 1, &xTasks1Handle );
+    xTaskCreate( vTask2, "TASK2", configMINIMAL_STACK_SIZE+1024, NULL, 2, &xTasks2Handle );
 }
 
 void loop() {
-    vTaskDelay( pdMS_TO_TICKS(10000) );
+    vTaskDelay( pdMS_TO_TICKS( 10000 ) );
 }
