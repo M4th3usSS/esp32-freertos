@@ -1,66 +1,40 @@
-/**
+/************************************************************
  * Exemplo que como enviar valores para uma fila 
  * a partir de uma ISR
  * Por: Matheus Sousa
-*/
+************************************************************/
 
-/* 
-    Biblioteca Arduino Core
-*/
+/* Biblioteca Arduino Core */
 #include <Arduino.h>
 
-/* 
-    Bibliotecas FreeRTOS 
-*/
+/* Bibliotecas FreeRTOS */
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
-/* 
-    Macros 
-*/
+/* Macros */
 #define LED 2
 #define BUTTON_ISR 12
 
-/* 
-    Definições Auxiliares
-*/
+/* Definições Auxiliares */
 QueueHandle_t xQueueHandle1;
 TaskHandle_t xTaskHandle1;
 BaseType_t xReturnedTask1;
 
-/* 
-    Protótipos das funções ISR
-*/
+/* Protótipos das funções ISR */
 void vISR( void );
 
-/* 
-    Protótipos das Tasks 
-*/
+/* Protótipos das Tasks */
 void vTask1( void *pvParameters );
 
-/* 
-    Definição das funções ISR
-*/
+/*  Definição das funções ISR */
 void vISR( void) {
 	static uint32_t ulCounter = 0; 	 
 	ulCounter++;
 	xQueueSendFromISR( xQueueHandle1, &ulCounter, NULL );
 }
 
-/* 
-    Definição das Tasks 
-*/
-void vTask1( void *pvParameters ) {
-
-	int32_t lReceivedValue;
-
-	for ( ;; ) {
-		xQueueReceive(xQueueHandle1, &lReceivedValue , portMAX_DELAY);
-		Serial.println( "BUTTON_ISR pressionado: " + String(lReceivedValue) );
-	}
-}
-
+/* Definição das Tasks  */
 void setup() {
 	Serial.begin( 9600) ;
 	pinMode( LED, OUTPUT);
@@ -96,3 +70,12 @@ void loop() {
 	vTaskDelay( pdMS_TO_TICKS( 1000 ) );
 }
 
+void vTask1( void *pvParameters ) {
+
+	int32_t lReceivedValue;
+
+	for ( ;; ) {
+		xQueueReceive(xQueueHandle1, &lReceivedValue , portMAX_DELAY);
+		Serial.println( "BUTTON_ISR pressionado: " + String(lReceivedValue) );
+	}
+}
