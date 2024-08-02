@@ -15,16 +15,20 @@
 /* Macros */
 #define LED 2
 
-/* Definições Auxiliares */
+/* Definições */
 TaskHandle_t xTasks1Handle = NULL;
 TaskHandle_t xTasks2Handle = NULL;
 
-/* Protótipos das Tasks */
+/* Protótipos */
 void vTask1(void *pvParameters);
 void vTask2(void *pvParameters);
 
-/* Definição das Tasks  */
-void setup()
+
+/**
+ * Task Setup
+ * 
+ */
+void setup(void)
 {
     Serial.begin(9600);
 
@@ -32,11 +36,22 @@ void setup()
     xTaskCreate(vTask2, "TASK2", configMINIMAL_STACK_SIZE + 1024, NULL, 2, &xTasks2Handle);
 }
 
-void loop()
+
+/**
+ * Task Loop
+ * 
+ */
+void loop(void)
 {
-    vTaskDelay(pdMS_TO_TICKS(10000));
+    vTaskDelay(pdMS_TO_TICKS(10000)); // Usada para liberar a CPU
 }
 
+
+/**
+ * Task 1
+ * 
+ * Blink Led
+ */
 void vTask1(void *pvParameters)
 {
     pinMode(LED, OUTPUT);
@@ -48,6 +63,12 @@ void vTask1(void *pvParameters)
     }
 }
 
+
+/**
+ * Task 1
+ * 
+ * Usa contador para suspender e retomar a Task1
+ */
 void vTask2(void *pvParameters)
 {
     uint32_t ulCount = 0;

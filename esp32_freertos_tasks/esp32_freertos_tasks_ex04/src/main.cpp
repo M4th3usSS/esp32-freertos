@@ -16,30 +16,45 @@
 #define LED1 2
 #define LED2 14
 
-/* Definições Auxiliares */
+/* Definições */
 TaskHandle_t xTask1Handle = NULL;
 TaskHandle_t xTask2Handle = NULL;
 TaskHandle_t xTask3Handle = NULL;
 
-/* Protótipos das Tasks */
+/* Protótipos */
 void vTask1(void *pvParameters);
 void vTask2(void *pvParameters);
 
-/* Definição das Tasks */
-void setup()
+
+/**
+ * Task Setup
+ * 
+ */
+void setup(void)
 {
     Serial.begin(9600);
 
-    xTaskCreate(vTask1, "TASK1", configMINIMAL_STACK_SIZE, (void *)LED1, 1, &xTask1Handle);
-    xTaskCreate(vTask1, "TASK3", configMINIMAL_STACK_SIZE, (void *)LED2, 1, &xTask3Handle); // Criando outra Task aproveitando a estrutura de definição
+    xTaskCreate(vTask1, "BLINK LED 1", configMINIMAL_STACK_SIZE, (void *)LED1, 1, &xTask1Handle);
+    xTaskCreate(vTask1, "BLINK LED 2", configMINIMAL_STACK_SIZE, (void *)LED2, 1, &xTask3Handle);
     xTaskCreate(vTask2, "TASK2", configMINIMAL_STACK_SIZE + 1024, (void *)50, 2, &xTask2Handle);
 }
 
-void loop()
+
+/**
+ * Task Loop
+ * 
+ */
+void loop(void)
 {
-    vTaskDelay(pdMS_TO_TICKS(10000));
+    vTaskDelay(pdMS_TO_TICKS(10000)); // Usada para liberar a CPU
 }
 
+
+/**
+ * Task 1
+ * 
+ * Blink Led passado como parâmetro na criação da Task
+ */
 void vTask1(void *pvParameters)
 {
     uint32_t ulGpio = (uint32_t)pvParameters;
@@ -53,6 +68,11 @@ void vTask1(void *pvParameters)
     }
 }
 
+/**
+ * Task 2
+ * 
+ * Contador com limite passado por parâmetro na criação da Task
+ */
 void vTask2(void *pvParameters)
 {
     uint32_t ulCount = 0;

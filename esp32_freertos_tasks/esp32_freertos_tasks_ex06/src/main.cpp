@@ -16,17 +16,21 @@
 #define LED1 2
 #define LED2 14
 
-/* Definições Auxiliares */
+/* Definições */
 TaskHandle_t xTask1Handle = NULL;
 TaskHandle_t xTask2Handle = NULL;
 TaskHandle_t xTask3Handle = NULL;
 
-/* Protótipos das Tasks */
+/* Protótipos */
 void vTask1(void *pvParameters);
 void vTask2(void *pvParameters);
 
-/* Definição das Tasks */
-void setup()
+
+/**
+ * Task Setup
+ * 
+ */
+void setup(void)
 {
     Serial.begin(9600);
 
@@ -36,11 +40,22 @@ void setup()
     xTaskCreatePinnedToCore(vTask2, "TASK2", configMINIMAL_STACK_SIZE + 1024, (void *)500, 2, &xTask2Handle, PRO_CPU_NUM);
 }
 
-void loop()
+
+/**
+ * Task Loop
+ * 
+ */
+void loop(void)
 {
     vTaskDelay(pdMS_TO_TICKS(10000));
 }
 
+
+/**
+ * Task 1
+ * 
+ * Blink Led
+ */
 void vTask1(void *pvParameters)
 {
     uint32_t ulGpio = (uint32_t)pvParameters;
@@ -54,6 +69,12 @@ void vTask1(void *pvParameters)
     }
 }
 
+
+/**
+ * Task 2
+ * 
+ * Contador
+ */
 void vTask2(void *pvParameters)
 {
     uint32_t ulCount = 0;

@@ -15,27 +15,36 @@
 #define LED 2
 #define BUTTON_ISR 12
 
-/* Definições Auxiliares */
+/* Definições */
 SemaphoreHandle_t xSemaphoreHandle1;
 
 TaskHandle_t xTaskHandleISR;
 
-/* Protótipos das Tasks */
-void vISR_CallBack(void);
+/* Protótipos */
+void vISRCallBack(void);
 void vTaskISR(void *Parameters);
 
-/* Definição das Tasks  */
+
+/**
+ * Task Setup
+ * 
+ */
 void setup()
 {
 	Serial.begin(9600);
 	pinMode(LED, OUTPUT);
 	pinMode(BUTTON_ISR, INPUT_PULLUP);
-	attachInterrupt(digitalPinToInterrupt(BUTTON_ISR), vISR_CallBack, FALLING);
+	attachInterrupt(digitalPinToInterrupt(BUTTON_ISR), vISRCallBack, FALLING);
 
 	xSemaphoreHandle1 = xSemaphoreCreateBinary();
 	xTaskCreate(vTaskISR, "Task ISR", configMINIMAL_STACK_SIZE + 1024, NULL, 3, &xTaskHandleISR);
 }
 
+
+/**
+ * Task Loop
+ * 
+ */
 void loop()
 {
 	/* KeepAlive da aplicação */
@@ -45,7 +54,12 @@ void loop()
 	vTaskDelay(pdMS_TO_TICKS(1000));
 }
 
-void vISR_CallBack(void)
+
+/**
+ * Função de CallBack da ISR
+ * 
+ */
+void vISRCallBack(void)
 {
 
 	BaseType_t xHighPriorityTaskWoken = pdTRUE;
@@ -58,6 +72,11 @@ void vISR_CallBack(void)
 	}
 }
 
+
+/**
+ * Task ISR
+ * 
+ */
 void vTaskISR(void *Parameters)
 {
 

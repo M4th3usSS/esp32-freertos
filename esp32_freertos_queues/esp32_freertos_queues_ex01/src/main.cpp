@@ -15,7 +15,7 @@
 /* Macros */
 #define LED 2
 
-/* Definições Auxiliares */
+/* Definições */
 QueueHandle_t xQueueHandle1;
 
 TaskHandle_t xTaskHandle1;
@@ -24,12 +24,16 @@ TaskHandle_t xTaskHandle2;
 BaseType_t xReturnedTask1;
 BaseType_t xReturnedTask2;
 
-/* Protótipos das Tasks */
+/* Protótipos */
 void vTask1(void *pvParameters);
 void vTask2(void *pvParameters);
 
-/* Definição das Tasks  */
-void setup()
+
+/**
+ * Task Setup
+ * 
+ */
+void setup(void)
 {
     Serial.begin(9600);
     pinMode(LED, OUTPUT);
@@ -81,12 +85,23 @@ void setup()
     }
 }
 
-void loop()
+
+/**
+ * Task Loop
+ * 
+ */
+void loop(void)
 {
     digitalWrite(LED, !digitalRead(LED));
     vTaskDelay(pdMS_TO_TICKS(1000));
 }
 
+
+/**
+ * Task 1
+ * 
+ * Envia o valor de um contador para a queue
+ */
 void vTask1(void *pvParameters)
 {
 
@@ -108,6 +123,12 @@ void vTask1(void *pvParameters)
     }
 }
 
+
+/**
+ * Task 2
+ * 
+ * Consume valores da queue e os imprime na serial
+ */
 void vTask2(void *pvParameters)
 {
 

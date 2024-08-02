@@ -30,18 +30,22 @@ typedef struct
     uint16_t usCounterMax;
 } StructCounter_t;
 
-/* Definições Auxiliares */
+/* Definições */
 TaskHandle_t xTask1Hanlde = NULL;
 TaskHandle_t xTask2Handle = NULL;
 TaskHandle_t xTask3Handle = NULL;
 TaskHandle_t xTask4Handle = NULL;
 
-/* Protótipos das Tasks */
+/* Protótipos */
 void vTask1(void *pvParameters);
 void vTask2(void *pvParameters);
 
-/* Definição das Tasks */
-void setup()
+
+/**
+ * Task Setup
+ * 
+ */
+void setup(void)
 {
     Serial.begin(9600);
 
@@ -63,11 +67,22 @@ void setup()
     xTaskCreate(vTask2, "Task4", configMINIMAL_STACK_SIZE + 1024, &xCounter2, 4, &xTask4Handle);
 }
 
-void loop()
+
+/**
+ * Task Loop
+ * 
+ */
+void loop(void)
 {
-    vTaskDelay(pdMS_TO_TICKS(10000));
+    vTaskDelay(pdMS_TO_TICKS(10000)); // Usada para liberar a CPU
 }
 
+
+/**
+ * Task 1
+ * 
+ * Blink Led com parâmetros passados via struct na criação da Task
+ */
 void vTask1(void *pvParameters)
 {
     StructLed_t xLed = *(StructLed_t *)pvParameters;
@@ -81,6 +96,12 @@ void vTask1(void *pvParameters)
     }
 }
 
+
+/**
+ * Task 2
+ * 
+ * Contador com parâmetros passados via struct na criação da Task
+ */
 void vTask2(void *pvParameters)
 {
     StructCounter_t xCounter = *(StructCounter_t *)pvParameters;

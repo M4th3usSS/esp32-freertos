@@ -15,29 +15,20 @@
 /* Macros */
 #define LED 2
 
-/* Definições Auxiliares */
+/* Definições */
 SemaphoreHandle_t xMutex;
 
 TaskHandle_t xTaskHandle1;
 TaskHandle_t xTaskHandle2;
 
-/* Protótipos das Tasks */
+/* Protótipos */
 void vTask1(void *pvParameters);
 void vTask2(void *pvParameters);
 
-/*
-    Simulando um recurso exclusivo
-    Uma Task não pode acessar essa função enquanto outra Task estiver há usando
-*/ 
-void vSendInformation( int32_t lInformation)
-{
-    xSemaphoreTake(xMutex, portMAX_DELAY);
-    Serial.println("Enviando informação da Task: " + String(lInformation));
-    delay(1000);
-    xSemaphoreGive(xMutex);
-}
-
-/* Definição das Tasks  */
+/**
+ * Task Setup
+ * 
+ */
 void setup()
 {
     Serial.begin(9600);
@@ -49,6 +40,11 @@ void setup()
     xTaskCreate(vTask2, "vTask2", configMINIMAL_STACK_SIZE+1024, NULL, 4, &xTaskHandle2);
 }
 
+
+/**
+ * Task Loop
+ * 
+ */
 void loop()
 {
     /* KeepAlive da aplicação */
@@ -58,6 +54,11 @@ void loop()
     vTaskDelay( pdMS_TO_TICKS(1000) );
 }
 
+
+/**
+ * Task 1
+ * 
+ */
 void vTask1(void *pvParameters)
 {
 
@@ -67,6 +68,12 @@ void vTask1(void *pvParameters)
         vTaskDelay(10); // precisamos usar timers para liberar a CPU em tasks com maior prioridade
     }
 }
+
+
+/**
+ * Task 2
+ * 
+ */
 void vTask2(void *pvParameters)
 {
 
@@ -75,4 +82,16 @@ void vTask2(void *pvParameters)
         vSendInformation(2);
         vTaskDelay(10); // precisamos usar timers para liberar a CPU em tasks com maior prioridade
     }
+}
+
+/*
+    Simulando uma função com recurso exclusivo
+    Tasks não podem compartilhar instruções dessa função simultaneamente!
+*/ 
+void vSendInformation( int32_t lInformation)
+{
+    xSemaphoreTake(xMutex, portMAX_DELAY);
+    Serial.println("Enviando informação da Task: " + String(lInformation));
+    delay(1000);
+    xSemaphoreGive(xMutex);
 }

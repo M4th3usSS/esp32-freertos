@@ -1,7 +1,7 @@
 /************************************************************
- * Exemplo que como enviar valores para uma fila 
- * a partir de uma ISR
- * Por: Matheus Sousa
+* Exemplo que como enviar valores para uma fila 
+* a partir de uma ISR
+* Por: Matheus Sousa
 ************************************************************/
 
 /* Biblioteca Arduino Core */
@@ -16,30 +16,25 @@
 #define LED 2
 #define BUTTON_ISR 12
 
-/* Definições Auxiliares */
+/* Definições */
 QueueHandle_t xQueueHandle1;
 TaskHandle_t xTaskHandle1;
 BaseType_t xReturnedTask1;
 
-/* Protótipos das funções ISR */
-void vISR( void );
+/* Protótipos */
+void vCallBackISR(void);
+void vTask1(void *pvParameters);
 
-/* Protótipos das Tasks */
-void vTask1( void *pvParameters );
 
-/*  Definição das funções ISR */
-void vISR( void) {
-	static uint32_t ulCounter = 0; 	 
-	ulCounter++;
-	xQueueSendFromISR( xQueueHandle1, &ulCounter, NULL );
-}
-
-/* Definição das Tasks  */
-void setup() {
+/**
+ * Task Setup
+ * 
+ */
+void setup(void) {
 	Serial.begin( 9600) ;
 	pinMode( LED, OUTPUT);
 	pinMode( BUTTON_ISR, INPUT_PULLUP);
-	attachInterrupt( digitalPinToInterrupt( BUTTON_ISR ), vISR, RISING) ;
+	attachInterrupt( digitalPinToInterrupt( BUTTON_ISR ), vCallBackISR, RISING) ;
 
 	/* Cria Queue: */ 
     xQueueHandle1 = xQueueCreate( 255, sizeof( int32_t ) );
@@ -65,11 +60,32 @@ void setup() {
 
 }
 
-void loop() {
+
+/**
+ * Task Loop
+ * 
+ */
+void loop(void) {
 	digitalWrite(LED, !digitalRead(LED));
 	vTaskDelay( pdMS_TO_TICKS( 1000 ) );
 }
 
+
+/** 
+ * Função CallBack de ISR 
+ * 
+ */
+void vCallBackISR(void) {
+	static uint32_t ulCounter = 0; 	 
+	ulCounter++;
+	xQueueSendFromISR( xQueueHandle1, &ulCounter, NULL );
+}
+
+
+/**
+ * Task 1
+ * 
+ */
 void vTask1( void *pvParameters ) {
 
 	int32_t lReceivedValue;
