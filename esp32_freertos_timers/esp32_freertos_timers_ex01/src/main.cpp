@@ -89,6 +89,7 @@ void vTask1(void *Parameters)
  * podem atrabalhar o funcionamento de outros timers.
  */
 
+
 /**
  * Função call-back do Timer1
  *
@@ -98,6 +99,7 @@ void vCallBackTimer1(TimerHandle_t xTimer)
 {
     digitalWrite(LED1, !digitalRead(LED1));
 }
+
 
 /**
  * Função call-back do Timer2
