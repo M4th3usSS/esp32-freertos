@@ -1,12 +1,11 @@
-// Criando macro: 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define setBit(word, bit)    (word |= (1<<bit))
 #define clearBit(word, bit)  (word &= ~(1<<bit))
 #define toogleBit(word, bit) (word ^= (1<<bit))
 #define testBit(word, bit)   (word & (1<<bit))
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 char *binario(int numero);
 
@@ -16,6 +15,8 @@ int main(void)
     // Deslocamento de bits a esquerda
     // variável << (número de bits adicionados a esquerda)
 
+    printf("\nDeslocando bits para a esquerda: \n\n");
+
     __uint8_t number1 = 0b00000111;
 
     printf("%s\n", binario(number1));      // 00000111
@@ -23,9 +24,16 @@ int main(void)
     printf("%s\n", binario(number1 << 2)); // 00011100
     printf("%s\n", binario(number1 << 3)); // 00111000
     printf("%s\n", binario(number1 << 4)); // 01110000
+    printf("%s\n", binario(number1 << 5)); // 11100000
+    printf("%s\n", binario(number1 << 6)); // 11000000
+    printf("%s\n", binario(number1 << 7)); // 10000000
+    printf("%s\n", binario(number1 << 8)); // 00000000
+
 
     // Deslocamento de bits a direita
     // variável >> (número de bits adicionados a esquerda)
+
+    printf("\nDeslocando bits para a direita: \n\n");
 
     __uint8_t number2 = 0b11100000;
 
@@ -34,6 +42,10 @@ int main(void)
     printf("%s\n", binario(number2 >> 2)); // 00111000
     printf("%s\n", binario(number2 >> 3)); // 00011100
     printf("%s\n", binario(number2 >> 4)); // 00001110
+    printf("%s\n", binario(number2 >> 5)); // 00000111
+    printf("%s\n", binario(number2 >> 6)); // 00000011
+    printf("%s\n", binario(number2 >> 7)); // 00000001
+    printf("%s\n", binario(number2 >> 8)); // 00000000
 
     /**
      * Ativando um bit:
@@ -44,11 +56,12 @@ int main(void)
 
     __uint8_t word1 = 0b00000000;
 
-    printf("\nAtivando um bit: %s\n", binario(word1));
+    printf("\nAtivando um bit:\n\n");
+    printf("%s\n", binario(word1));
 
-    // Ativando o quinto bit:
     word1 |= (1 << 5); // (1<<5) é equivalente há: 00010000
-    printf("Ativando um bit: %s\n", binario(word1));
+
+    printf("%s\n", binario(word1));
 
     /**
      * Limpando um bit:
@@ -59,9 +72,13 @@ int main(void)
 
     __uint8_t word2 = 0b00010000;
 
-    printf("\nLimpando um bit: %s\n", binario(word2));
+    printf("\nLimpando um bit:\n\n");
+
+    printf("%s\n", binario(word2));
+
     word2 &= (~(1 << 4)); // 00010000 & 11101111
-    printf("Limpando um bit: %s\n", binario(word2));
+
+    printf("%s\n", binario(word2));
 
     /**
      * Invertendo o estado de um bit
@@ -71,11 +88,13 @@ int main(void)
 
     __uint8_t word3 = 0b00000000;
 
-    printf("\nInvertendo um bit: %s\n", binario(word3));
+    printf("\nToggle de um bit:\n\n");
+
+    printf("%s\n", binario(word3));
     word3 ^= (1 << 6); // 00000000 ^ 01000000
-    printf("Invertendo um bit: %s\n", binario(word3));
+    printf("%s\n", binario(word3));
     word3 ^= (1 << 6); // 01000000 ^ 01000000
-    printf("Invertendo um bit: %s\n", binario(word3));
+    printf("%s\n", binario(word3));
 
     /**
      * Testando valor de um bit
@@ -86,16 +105,23 @@ int main(void)
 
     __uint8_t word4 = 0b10101010;
 
-    printf("\nTeste bit a bit:\n");
+    printf("\nTeste bit a bit:\n\n");
 
     for (__uint8_t i = 0; i < 8; i++)
     {
         if (word4 & (1 << i))
         {
-            printf("Bit%d ", i);
+            printf("Bit%d\n", i);
         }
     }
     printf("\n\n");
+
+
+    /**
+     * Usando as macros
+    */
+
+    printf("\nTeste bit a bit:\n\n");
 
     __uint8_t wordUsandoMacros = 0b00000000;
     
