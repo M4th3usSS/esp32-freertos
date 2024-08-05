@@ -59,7 +59,7 @@ int main(void)
     printf("\nAtivando um bit:\n\n");
     printf("%s\n", binario(word1));
 
-    word1 |= (1 << 5); // (1<<5) é equivalente há: 00010000
+    word1 |= (1 << 5); // 00000000 | 00010000
 
     printf("%s\n", binario(word1));
 
