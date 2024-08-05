@@ -12,11 +12,12 @@ char *binario(int numero);
 int main(void)
 {
 
-    // Deslocamento de bits a esquerda
-    // variável << (número de bits adicionados a esquerda)
+    /**
+     * Deslocamento de bits a esquerda
+     * variável << (número de bits adicionados a esquerda)
+    */
 
     printf("\nDeslocando bits para a esquerda: \n\n");
-
     __uint8_t number1 = 0b00000111;
 
     printf("%s\n", binario(number1));      // 00000111
@@ -29,12 +30,12 @@ int main(void)
     printf("%s\n", binario(number1 << 7)); // 10000000
     printf("%s\n", binario(number1 << 8)); // 00000000
 
-
-    // Deslocamento de bits a direita
-    // variável >> (número de bits adicionados a esquerda)
+    /**
+     * Deslocamento de bits a direita
+     * variável >> (número de bits adicionados a esquerda)
+    */
 
     printf("\nDeslocando bits para a direita: \n\n");
-
     __uint8_t number2 = 0b11100000;
 
     printf("%s\n", binario(number2));      // 11100000
@@ -52,15 +53,13 @@ int main(void)
      *
      * Para ativar um bit especifico de uma variável ou registrador, ou seja,
      * colocar nível lógico 1, utiliza-se o operador |.
-     */
+    */
 
     __uint8_t word1 = 0b00000000;
 
     printf("\nAtivando um bit:\n\n");
     printf("%s\n", binario(word1));
-
     word1 |= (1 << 5); // 00000000 | 00010000
-
     printf("%s\n", binario(word1));
 
     /**
@@ -68,23 +67,20 @@ int main(void)
      *
      * Para limpar um bit específico de uma variável ou registrador, ou seja,
      * colocar nível lógico 0, utiliza-se o operador & (AND).
-     */
+    */
 
     __uint8_t word2 = 0b00010000;
 
     printf("\nLimpando um bit:\n\n");
-
     printf("%s\n", binario(word2));
-
     word2 &= (~(1 << 4)); // 00010000 & 11101111
-
     printf("%s\n", binario(word2));
 
     /**
      * Invertendo o estado de um bit
      *
      * Para inverter o estado lógico de um bit utiliza-se o operador ^ (OU-Exclusivo).
-     */
+    */
 
     __uint8_t word3 = 0b00000000;
 
