@@ -25,7 +25,10 @@ void vTask1(void *Parameters);
 void vCallBackTimer1(TimerHandle_t xTimer);
 void vCallBackTimer2(TimerHandle_t xTimer);
 
-void setup()
+/**
+ * Setup
+ */
+void setup(void)
 {
     Serial.begin(9600);
     pinMode(LED1, OUTPUT);
@@ -40,14 +43,16 @@ void setup()
     xTimerStart(xTimer1, 0);
 }
 
-void loop()
+/**
+ * Loop
+ */
+void loop(void)
 {
     vTaskDelay(pdMS_TO_TICKS(1000));
 }
 
 /**
- * Task 1
- *
+ * Task 1:
  * Tarefa que monitora o estado de um botão (com Deboucing) para parar o Timer 1 e iniciar o Timer 2
  */
 void vTask1(void *Parameters)
